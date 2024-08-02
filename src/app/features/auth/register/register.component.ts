@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { AuthService } from '../../../../core/services/auth/auth.service';
-import { User } from '../../../../core/models/user.model';
+import { AuthService } from '../../../core/services/auth/auth.service';
+import { User } from '../../../core/models/user.model';
 
 @Component({
   selector: 'app-register',

@@ -2,23 +2,31 @@ import { Injectable } from '@angular/core';
 import { AuthRequest } from '../../models/auth.model';
 import { User } from '../../models/user.model';
 import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private messageService: MessageService , ) {}
+  loggedUser: User | null;
+  constructor(private messageService: MessageService, private router: Router) {
+    this.loggedUser = null;
+  }
 
   login = (authRequest: AuthRequest) => {
     const users: User[] = JSON.parse(localStorage.getItem('USERS') ?? '[]');
     const user = users.find(
       (u) => u.email == authRequest.email && u.password == authRequest.password
     );
-    if (!user)
+    if (!user) {
       this.messageService.add({
         severity: 'error',
         summary: 'Invalid Username / Password',
       });
+    } else {
+      this.loggedUser = user
+      this.router.navigate(['/member']);
+    }
   };
 
   register = (user: User) => {

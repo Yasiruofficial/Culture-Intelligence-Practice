@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { AuthService } from '../../../../core/services/auth/auth.service';
-import { AuthRequest } from '../../../../core/models/auth.model';
+import { AuthService } from '../../../core/services/auth/auth.service';
+import { AuthRequest } from '../../../core/models/auth.model';
 
 @Component({
   selector: 'app-login',
