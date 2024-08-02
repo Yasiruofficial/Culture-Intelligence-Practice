@@ -1,1 +1,44 @@
-<p>login works!</p>
+<div
+  class="flex w-full h-screen justify-center items-center border border-red-400 bg-slate-100"
+>
+<p-toast position="top-center"></p-toast>
+  <p-card header="Culture Intelligence">
+    <ng-template pTemplate="title">Login</ng-template>
+    <form [formGroup]="singInForm" (ngSubmit)="onSubmit()">
+      <div class="grid grid-cols-3 grid-rows-2 gap-4">
+        <div><label for="email">Email</label></div>
+        <div class="col-span-2">
+          <input
+            type="text"
+            id="email"
+            name="email"
+            pInputText
+            formControlName="email"
+          />
+        </div>
+        <div class="row-start-2">
+          <label for="password">Password</label>
+        </div>
+        <div class="col-span-2 row-start-2">
+          <input
+            type="text"
+            id="password"
+            name="password"
+            pInputText
+            formControlName="password"
+          />
+        </div>
+      </div>
+      <div class="flex justify-end mt-5">
+        <p-button type="submit">Login</p-button>
+      </div>
+    </form>
+    <p-divider></p-divider>
+    <a
+      [routerLink]="['/auth/register']"
+      class="text-[#01A6F0]"
+    >
+      Create a new account ?
+    </a>
+  </p-card>
+</div>
