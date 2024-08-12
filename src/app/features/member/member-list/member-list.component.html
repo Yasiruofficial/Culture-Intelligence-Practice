@@ -31,7 +31,7 @@
           <td>{{ member.email }}</td>
           <td>{{ member.gender }}</td>
           <td>
-            <p-button icon="pi pi-pencil" [text]="true" severity="warning"  />
+            <p-button icon="pi pi-pencil" [text]="true" severity="warning" (onClick)="navigateToEdit(member.id)"  />
           </td>
           <td>
             <p-button icon="pi pi-trash" [text]="true" severity="danger" (onClick)="deleteMember(member.id)" />

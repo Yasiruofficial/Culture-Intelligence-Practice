@@ -8,14 +8,21 @@ const routes: Routes = [
     loadComponent: () =>
       import('./member-list/member-list.component').then(
         (m) => m.MemberListComponent
-      )
+      ),
   },
   {
     path: 'add',
     loadComponent: () =>
       import('./member-add/member-add.component').then(
         (m) => m.MemberAddComponent
-      )
+      ),
+  },
+  {
+    path: ':id',
+    loadComponent: () =>
+      import('./member-add/member-add.component').then(
+        (m) => m.MemberAddComponent
+      ),
   },
 ];
 

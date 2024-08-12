@@ -38,12 +38,12 @@ import { Subscription } from 'rxjs';
 })
 export class MemberListComponent implements OnDestroy {
   members: Member[];
-  memberSub: Subscription;
+  memberSubscription: Subscription;
 
   constructor(private router: Router, private memberService: MemberService) {
     console.log('Member list initiated');
     this.members = [];
-    this.memberSub = this.memberService
+    this.memberSubscription = this.memberService
       .getMembers()
       .subscribe((data) => (this.members = data));
   }
@@ -52,12 +52,16 @@ export class MemberListComponent implements OnDestroy {
     this.memberService.deleteMember(id);
   };
 
+  navigateToEdit = (id : number) => {
+    this.router.navigate([`/${id}`])
+  }
+
   logout = () => {
     localStorage.removeItem('LOGGED_USER');
     this.router.navigate(['/auth/login']);
   };
 
   ngOnDestroy(): void {
-    this.memberSub.unsubscribe();
+    this.memberSubscription.unsubscribe();
   }
 }
