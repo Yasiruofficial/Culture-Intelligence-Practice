@@ -12,7 +12,6 @@ import { User } from '../../../core/models/user.model';
 export class RegisterComponent {
   constructor(
     private fb: FormBuilder,
-    private messageService: MessageService,
     private authService: AuthService
   ) {}
 

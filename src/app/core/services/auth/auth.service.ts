@@ -8,10 +8,7 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class AuthService {
-  loggedUser: User | null;
-  constructor(private messageService: MessageService, private router: Router) {
-    this.loggedUser = null;
-  }
+  constructor(private messageService: MessageService, private router: Router) {console.log("Created new instance")}
 
   login = (authRequest: AuthRequest) => {
     const users: User[] = JSON.parse(localStorage.getItem('USERS') ?? '[]');
@@ -24,8 +21,8 @@ export class AuthService {
         summary: 'Invalid Username / Password',
       });
     } else {
-      this.loggedUser = user
-      this.router.navigate(['/member']);
+      localStorage.setItem("LOGGED_USER", JSON.stringify(user))
+      this.router.navigate(['/']);
     }
   };
 
@@ -47,14 +44,9 @@ export class AuthService {
         summary: 'You successfully an Account',
         detail: 'Please login',
       });
+      this.router.navigate(['/auth/login']);
     }
   };
   logout = () => {};
-  getInstance = (): User => {
-    return {
-      name: '',
-      email: '',
-      password: '',
-    };
-  };
+
 }

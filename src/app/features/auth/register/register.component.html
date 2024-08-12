@@ -6,12 +6,12 @@
     <ng-template pTemplate="title">Register</ng-template>
     <form [formGroup]="singUpForm" (ngSubmit)="onSubmit()">
       <div class="grid grid-cols-3 grid-rows-3 gap-4">
-        <div><label for="email">Full Name</label></div>
+        <div><label for="fullName">Full Name</label></div>
         <div class="col-span-2">
           <input
             type="text"
-            id="email"
-            name="email"
+            id="fullName"
+            name="fullName"
             pInputText
             formControlName="fullName"
           />
@@ -19,7 +19,7 @@
         <div class="row-start-2"><label for="email">Email</label></div>
         <div class="col-span-2 row-start-2">
           <input
-            type="text"
+            type="email"
             id="email"
             name="email"
             pInputText
@@ -31,7 +31,7 @@
         </div>
         <div class="col-span-2 row-start-3">
           <input
-            type="text"
+            type="password"
             id="password"
             name="password"
             pInputText

@@ -1,1 +1,43 @@
-<p>member-list works!</p>
+<div class="h-screen w-full px-40 py-12">
+  <div class="flex justify-end">
+    <p-button (onClick)="logout()" label="Logout" />
+  </div>
+  <p-card class="flex flex-col" header="Members">
+    <div class="flex justify-end">
+      <a [routerLink]="['/add']" routerLinkActive="router-link-active" pButton
+        >Add Members</a
+      >
+    </div>
+    <p-table
+      [value]="members"
+      [loading]="!members"
+      [paginator]="true"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 25, 50]"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Gender</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-member>
+        <tr>
+          <td>{{ member.first_name }}</td>
+          <td>{{ member.last_name }}</td>
+          <td>{{ member.email }}</td>
+          <td>{{ member.gender }}</td>
+          <td>
+            <p-button icon="pi pi-pencil" [text]="true" severity="warning"  />
+          </td>
+          <td>
+            <p-button icon="pi pi-trash" [text]="true" severity="danger" (onClick)="deleteMember(member.id)" />
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>

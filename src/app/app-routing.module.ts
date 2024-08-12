@@ -1,16 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserUtils } from '@azure/msal-browser';
+import { AuthGuard } from './core/guards/auth/auth.guard';
 
 const routes: Routes = [
   {
-    path : "auth",
-    loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule)
+    path: '',
+    loadChildren: () =>
+      import('./features/member/member-routing.module').then((m) => m.MemberRoutingModule),
+    canActivateChild: [AuthGuard],
   },
   {
-    path : "member",
-    loadChildren: () => import('./features/member/member.module').then(m => m.MemberModule)
-  }
+    path: 'auth',
+    loadChildren: () =>
+      import('./features/auth/auth.module').then((m) => m.AuthModule),
+    canActivateChild: [AuthGuard],
+  },
 ];
 
 @NgModule({

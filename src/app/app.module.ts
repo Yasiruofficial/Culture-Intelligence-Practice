@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';;
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,6 +25,8 @@ import {
   MsalGuardConfiguration,
   MsalRedirectComponent,
 } from '@azure/msal-angular';
+import { MessageService } from 'primeng/api';
+import { RouterModule } from '@angular/router';
 
 export function loggerCallback(logLevel: LogLevel, message: string) {
   console.log(message);
@@ -71,6 +73,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     MsalModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
+    RouterModule,
   ],
   providers: [
     {
@@ -84,6 +87,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     MsalService,
     MsalGuard,
     MsalBroadcastService,
+    MessageService
   ],
   bootstrap: [AppComponent, MsalRedirectComponent],
 })

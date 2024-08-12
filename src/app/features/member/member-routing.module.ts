@@ -5,15 +5,17 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    loadChildren: () =>
-      import('./member-list/member-list.module').then(
-        (m) => m.MemberListModule
+    loadComponent: () =>
+      import('./member-list/member-list.component').then(
+        (m) => m.MemberListComponent
       )
   },
   {
     path: 'add',
-    loadChildren: () =>
-      import('./member-add/member-add.module').then((m) => m.MemberAddModule),
+    loadComponent: () =>
+      import('./member-add/member-add.component').then(
+        (m) => m.MemberAddComponent
+      )
   },
 ];
 

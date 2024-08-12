@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { AuthRequest } from '../../../core/models/auth.model';
 
@@ -11,12 +10,11 @@ import { AuthRequest } from '../../../core/models/auth.model';
 })
 export class LoginComponent {
   constructor(
-    private fb: FormBuilder,
-    private messageService: MessageService,
+    private formBuilder: FormBuilder,
     private authService: AuthService
   ) {}
 
-  singInForm = this.fb.group({
+  singInForm = this.formBuilder.group({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
   });
@@ -25,8 +23,6 @@ export class LoginComponent {
     if (this.singInForm.valid) {
       const authRequest: AuthRequest = this.singInForm.value as AuthRequest;
       this.authService.login(authRequest);
-    }else{
-      console.log(this.singInForm)
     }
   };
 }
