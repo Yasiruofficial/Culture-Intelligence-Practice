@@ -22,7 +22,7 @@ export class AuthService {
       });
     } else {
       localStorage.setItem("LOGGED_USER", JSON.stringify(user))
-      this.router.navigate(['/']);
+      this.router.navigate(['/members']);
     }
   };
 

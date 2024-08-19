@@ -1,12 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Member } from '../../../core/models/member.model';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -22,10 +22,12 @@ import {
   ActivatedRoute,
   Router,
 } from '@angular/router';
-import { map, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
 
 @Component({
-  selector: 'app-member-add',
+  selector: 'app-member-upsert',
   standalone: true,
   imports: [
     CommonModule,
@@ -39,28 +41,33 @@ import { map, Subscription } from 'rxjs';
     RouterModule,
     RouterLink,
     RouterLinkActive,
+    ProgressSpinnerModule,
   ],
-  templateUrl: './member-add.component.html',
-  styleUrl: './member-add.component.scss',
+  templateUrl: './member-upsert.component.html',
+  styleUrl: './member-upsert.component.scss'
 })
-export class MemberAddComponent implements OnDestroy, OnInit {
-  addMemberForm: FormGroup;
-  isAddComponent: boolean;
-  memberId: string | null;
+export class MemberUpsertComponent implements OnDestroy{
+  upsertMemberForm: FormGroup;
+  memberId: number | null;
   memberSubscription?: Subscription;
-  isLoading: boolean;
+  loading: boolean = false;
 
+  customValidfunc(control : AbstractControl){
+    return {
+      error : "Not valid"
+    }
+  }
+  
   constructor(
     private formBuilder: FormBuilder,
     private memberService: MemberService,
     private route: ActivatedRoute,
     private router: Router
   ) {
-    this.memberId = this.route.snapshot.paramMap.get('id');
-    this.isAddComponent = !this.memberId;
-    this.isLoading = true;
+    this.memberId = Number(this.route.snapshot.paramMap.get('id'));
+    if (isNaN(this.memberId)) this.router.navigate(['/members']);
 
-    this.addMemberForm = this.formBuilder.group({
+    this.upsertMemberForm = this.formBuilder.group({
       first_name: new FormControl('', {
         validators: [Validators.required],
         nonNullable: true,
@@ -78,40 +85,46 @@ export class MemberAddComponent implements OnDestroy, OnInit {
         nonNullable: true,
       }),
     });
-  }
-  ngOnInit(): void {
-    if (this.memberId && !this.isAddComponent) {
+    
+
+    if (this.memberId) {
+      this.loading = true;
       this.memberSubscription = this.memberService
-        .fetchMembers()
-        .pipe(
-          map((members) =>
-            members.find((member) => member.id === Number(this.memberId))
-          )
-        )
-        .subscribe((data) => {
-          if (data) {
-            this.addMemberForm.setValue({
-              first_name: data.first_name,
-              last_name: data.last_name,
-              email: data.email,
-              gender: data.gender,
-            });
-          } else {
-            this.router.navigate(['/']);
-          }
+        .getMemberById(this.memberId)
+        .subscribe({
+          next: (data) => {
+            console.log('member add subscribe executed', data);
+            if (data) {
+              this.upsertMemberForm.setValue({
+                first_name: data.first_name,
+                last_name: data.last_name,
+                email: data.email,
+                gender: data.gender,
+              });
+              this.loading = false;
+            }
+          },
+          error: (err) => {
+            this.loading = false;
+            alert(err);
+            this.router.navigate(['/members']);
+          },
         });
     }
   }
 
-  onSubmit = () => {
-    if (this.addMemberForm.valid) {
-      if (this.isAddComponent) {
-        this.memberService.addMember(this.addMemberForm.getRawValue());
+  onSubmit() {
+    if (this.upsertMemberForm.valid) {
+      if (!this.memberId) {
+        this.memberService.addMember(this.upsertMemberForm.getRawValue());
       } else {
-        this.memberService.editMember(Number(this.memberId),this.addMemberForm.getRawValue());
+        this.memberService.updateMember(
+          this.memberId,
+          this.upsertMemberForm.getRawValue()
+        );
       }
     }
-  };
+  }
 
   ngOnDestroy(): void {
     if (this.memberSubscription) this.memberSubscription.unsubscribe();

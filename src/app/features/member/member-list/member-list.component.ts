@@ -16,11 +16,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { Subscription } from 'rxjs';
+import { CustomConfirmboxComponent } from '../../../shared/custom-confirmbox/custom-confirmbox.component';
+import { QuickEditComponent } from './quick-edit/quick-edit.component';
 
 @Component({
   selector: 'app-member-list',
   standalone: true,
   imports: [
+    CustomConfirmboxComponent,
     CommonModule,
     ButtonModule,
     TableModule,
@@ -32,34 +35,55 @@ import { Subscription } from 'rxjs';
     RouterModule,
     RouterLink,
     RouterLinkActive,
+    QuickEditComponent,
   ],
   templateUrl: './member-list.component.html',
   styleUrl: './member-list.component.scss',
 })
 export class MemberListComponent implements OnDestroy {
-  members: Member[];
+  members: Member[] = [];
+  visible = false;
+  selectedMember: any = null;
   memberSubscription: Subscription;
 
   constructor(private router: Router, private memberService: MemberService) {
-    console.log('Member list initiated');
-    this.members = [];
     this.memberSubscription = this.memberService
       .getMembers()
-      .subscribe((data) => (this.members = data));
+      .subscribe((data) => {
+        console.log('member list subscribe executed', data);
+        if (data) this.members = data;
+      });
   }
 
-  deleteMember = (id: number) => {
+  deleteMember(id: number) {
     this.memberService.deleteMember(id);
-  };
-
-  navigateToEdit = (id : number) => {
-    this.router.navigate([`/${id}`])
   }
 
-  logout = () => {
+  navigateToEdit(id: number) {
+    this.router.navigate([`members/update/${id}`]);
+  }
+
+  openQuickEdit(member: Member) {
+    this.selectedMember = { ...member };
+    this.visible = true;
+  }
+
+  closeQuickEdit() {
+    this.selectedMember = null;
+    this.visible = false;
+  }
+
+  updateMember(updatedMember: Member) {
+    if (updatedMember.id) {
+      this.memberService.updateMember(updatedMember.id, updatedMember);
+    }
+    this.closeQuickEdit();
+  }
+
+  logout() {
     localStorage.removeItem('LOGGED_USER');
     this.router.navigate(['/auth/login']);
-  };
+  }
 
   ngOnDestroy(): void {
     this.memberSubscription.unsubscribe();

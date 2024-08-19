@@ -13,17 +13,18 @@ const routes: Routes = [
   {
     path: 'add',
     loadComponent: () =>
-      import('./member-add/member-add.component').then(
-        (m) => m.MemberAddComponent
+      import('./member-upsert/member-upsert.component').then(
+        (m) => m.MemberUpsertComponent
       ),
   },
   {
-    path: ':id',
+    path: 'update/:id',
     loadComponent: () =>
-      import('./member-add/member-add.component').then(
-        (m) => m.MemberAddComponent
+      import('./member-upsert/member-upsert.component').then(
+        (m) => m.MemberUpsertComponent
       ),
   },
+  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({

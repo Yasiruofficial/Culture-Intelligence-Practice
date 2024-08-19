@@ -5,17 +5,20 @@ import { AuthGuard } from './core/guards/auth/auth.guard';
 
 const routes: Routes = [
   {
-    path: '',
-    loadChildren: () =>
-      import('./features/member/member-routing.module').then((m) => m.MemberRoutingModule),
-    canActivateChild: [AuthGuard],
-  },
-  {
     path: 'auth',
     loadChildren: () =>
       import('./features/auth/auth.module').then((m) => m.AuthModule),
     canActivateChild: [AuthGuard],
   },
+  {
+    path: 'members',
+    loadChildren: () =>
+      import('./features/member/member-routing.module').then(
+        (m) => m.MemberRoutingModule
+      ),
+    canActivateChild: [AuthGuard],
+  },
+  { path: '**', redirectTo: '/auth/login' },
 ];
 
 @NgModule({

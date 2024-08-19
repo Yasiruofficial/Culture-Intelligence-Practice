@@ -19,7 +19,7 @@ export class LoginComponent {
     password: new FormControl('', Validators.required),
   });
 
-  onSubmit = () => {
+  onSubmit () {
     if (this.singInForm.valid) {
       const authRequest: AuthRequest = this.singInForm.value as AuthRequest;
       this.authService.login(authRequest);

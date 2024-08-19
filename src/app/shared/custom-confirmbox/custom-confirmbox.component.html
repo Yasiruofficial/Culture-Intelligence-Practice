@@ -1,0 +1,26 @@
+<div class="card flex flex-column align-items-center gap-2">
+  <div onkeypress="">
+    <button
+      (click)="showDialog('top')"
+      class="bg-transparent border-none cursor-pointer inline-flex items-center justify-center p-2 focus:outline-none"
+    >
+      <ng-content select=".icon"></ng-content>
+    </button>
+    
+  </div>
+  <p-dialog
+    [header]="header"
+    [modal]="true"
+    [(visible)]="visible"
+    [position]="position"
+    [style]="{ width: '25rem' }"
+  >
+    <div class="flex flex-col gap-10">
+      <div><ng-content select=".body"></ng-content></div>
+      <div class="flex gap-2 justify-end">
+        <div><p-button label="Yes" (onClick)="resolveCallback.emit()" /></div>
+        <div><p-button label="No" (onClick)="visible = false" /></div>
+      </div>
+    </div>
+  </p-dialog>
+</div>

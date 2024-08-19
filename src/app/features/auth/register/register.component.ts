@@ -10,10 +10,7 @@ import { User } from '../../../core/models/user.model';
   styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService
-  ) {}
+  constructor(private fb: FormBuilder, private authService: AuthService) {}
 
   singUpForm = this.fb.group({
     fullName: new FormControl('', Validators.required),
@@ -21,12 +18,12 @@ export class RegisterComponent {
     password: new FormControl('', Validators.required),
   });
 
-  onSubmit = () => {
+  onSubmit() {
     if (this.singUpForm.valid) {
       const user: User = this.singUpForm.value as User;
       this.authService.register(user);
     } else {
       console.log(this.singUpForm);
     }
-  };
+  }
 }

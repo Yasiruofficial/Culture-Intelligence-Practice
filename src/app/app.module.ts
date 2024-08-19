@@ -27,6 +27,7 @@ import {
 } from '@azure/msal-angular';
 import { MessageService } from 'primeng/api';
 import { RouterModule } from '@angular/router';
+import { QuickEditComponent } from './features/member/member-list/quick-edit/quick-edit.component';
 
 export function loggerCallback(logLevel: LogLevel, message: string) {
   console.log(message);
@@ -73,7 +74,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     MsalModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
-    RouterModule,
+    RouterModule
   ],
   providers: [
     {

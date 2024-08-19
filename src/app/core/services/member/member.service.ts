@@ -1,61 +1,104 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Member } from '../../models/member.model';
-import { BehaviorSubject, interval, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MemberService {
-  private members = new BehaviorSubject<Member[]>([]);
+  private membersSubject = new BehaviorSubject<Member[] | undefined>(undefined);
+  $membersData = this.membersSubject.asObservable();
+
+  sharedV = Math.random();
 
   constructor(private http: HttpClient, private router: Router) {
     this.http
       .get<Member[]>(
         'https://run.mocky.io/v3/6f88b2a6-0df7-48ce-8337-b870280a2d76'
       )
-      .subscribe((data) => this.members.next(data));
+      .pipe(
+        catchError((error) => {
+          alert('Network Error, Please check your connection');
+          return of([]);
+        })
+      )
+      .subscribe((data) => {
+        this.membersSubject.next(data);
+      });
   }
 
-  getMembers = () => {
-    return this.members;
+  getMembers = (): Observable<Member[] | undefined> => {
+    return this.$membersData;
   };
 
-  fetchMembers = () => {
-    return this.http.get<Member[]>(
-      'https://run.mocky.io/v3/6f88b2a6-0df7-48ce-8337-b870280a2d76'
+  getMemberById = (memberId: number): Observable<Member | undefined> => {
+    return this.$membersData.pipe(
+      map((members) => {
+        if (!members) return undefined;
+
+        const member = members.find((member) => member.id === memberId);
+        if (!member) {
+          throw new Error(`User with ID ${memberId} not found`);
+        }
+        return member;
+      })
     );
   };
 
   addMember = (member: Member) => {
-    const currentMembers = this.members.value;
-    this.members.next([
-      ...currentMembers,
-      {
-        id: currentMembers.length + 1,
-        ...member,
-      },
-    ]);
-
-    this.router.navigate(['/']);
+    if (this.membersSubject?.value) {
+      this.membersSubject.next([
+        ...this.membersSubject.value,
+        {
+          id: new Date().getTime(),
+          ...member,
+        },
+      ]);
+    }
+    this.router.navigate(['/members']);
   };
-  editMember = (id: number, member: Member) => {
-    const currentMembers = this.members.value;
 
-    const modifiedMembers = currentMembers.map((m) => {
+  updateMember = (id: number, member: Member) => {
+    const modifiedMembers = this.membersSubject?.value?.map((m) => {
       if (m.id == id) {
         return member;
       } else {
         return m;
       }
     });
-    this.members.next(modifiedMembers);
+    this.membersSubject.next(modifiedMembers);
+    this.router.navigate(['/']);
+  };
+
+  quickEditMember = ({
+    id,
+    email,
+    first_name,
+  }: {
+    id: number;
+    email: string;
+    first_name: string;
+  }) => {
+    const modifiedMembers = this.membersSubject?.value?.map((m) => {
+      if (m.id == id) {
+        return {
+          ...m,
+          email,
+          first_name,
+        };
+      } else {
+        return m;
+      }
+    });
+    this.membersSubject.next(modifiedMembers);
     this.router.navigate(['/']);
   };
 
   deleteMember = (id: number) => {
-    const currentMembers = this.members.value;
-    this.members.next(currentMembers.filter((member) => member.id !== id));
+    this.membersSubject.next(
+      this.membersSubject?.value?.filter((member) => member.id !== id)
+    );
   };
 }

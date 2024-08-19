@@ -4,13 +4,16 @@
   </div>
   <p-card class="flex flex-col" header="Members">
     <div class="flex justify-end">
-      <a [routerLink]="['/add']" routerLinkActive="router-link-active" pButton
+      <a
+        [routerLink]="['/members/add']"
+        routerLinkActive="router-link-active"
+        pButton
         >Add Members</a
       >
     </div>
     <p-table
       [value]="members"
-      [loading]="!members"
+      [loading]="members.length == 0"
       [paginator]="true"
       [tableStyle]="{ 'min-width': '50rem' }"
       [rows]="10"
@@ -22,6 +25,9 @@
           <th>Last Name</th>
           <th>Email</th>
           <th>Gender</th>
+          <th></th>
+          <th></th>
+          <th></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-member>
@@ -31,13 +37,41 @@
           <td>{{ member.email }}</td>
           <td>{{ member.gender }}</td>
           <td>
-            <p-button icon="pi pi-pencil" [text]="true" severity="warning" (onClick)="navigateToEdit(member.id)"  />
+            <button (click)="openQuickEdit(member)">QE</button>
           </td>
           <td>
-            <p-button icon="pi pi-trash" [text]="true" severity="danger" (onClick)="deleteMember(member.id)" />
+            <p-button
+              icon="pi pi-pencil"
+              [text]="true"
+              severity="warning"
+              (onClick)="navigateToEdit(member.id)"
+            />
+          </td>
+          <td>
+            <app-custom-confirmbox
+              (resolveCallback)="deleteMember(member.id)"
+              header="Delete Member"
+            >
+              <p-button
+                class="icon"
+                icon="pi pi-trash"
+                [text]="true"
+                severity="danger"
+              ></p-button>
+
+              <span class="body">Are You Sure want to delete this?</span>
+            </app-custom-confirmbox>
           </td>
         </tr>
       </ng-template>
     </p-table>
   </p-card>
+
+  <app-quick-edit
+    [visible]="visible"
+    [selectedMember]="selectedMember"
+    (closeQuickEdit)="closeQuickEdit()"
+    (updateMember)="updateMember($event)"
+  ></app-quick-edit>
+  
 </div>
