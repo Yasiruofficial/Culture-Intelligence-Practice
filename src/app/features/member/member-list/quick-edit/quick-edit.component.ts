@@ -53,8 +53,8 @@ export class QuickEditComponent implements OnChanges {
   onSubmit() {
     this.updateMember.emit({
       ...this.selectedMember,
-      first_name: this.quickEditform.controls['first_name'].value,
-      email: this.quickEditform.controls['email'].value,
+      first_name: this.quickEditform.get('first_name'),
+      email: this.quickEditform.get('email'),
     });
   }
 

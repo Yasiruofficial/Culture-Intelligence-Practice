@@ -52,11 +52,6 @@ export class MemberUpsertComponent implements OnDestroy{
   memberSubscription?: Subscription;
   loading: boolean = false;
 
-  customValidfunc(control : AbstractControl){
-    return {
-      error : "Not valid"
-    }
-  }
   
   constructor(
     private formBuilder: FormBuilder,
