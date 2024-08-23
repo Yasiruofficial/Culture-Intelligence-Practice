@@ -32,8 +32,8 @@
       </ng-template>
       <ng-template pTemplate="body" let-member>
         <tr>
-          <td>{{ member.first_name }}</td>
-          <td>{{ member.last_name }}</td>
+          <td>{{ member.firstName }}</td>
+          <td>{{ member.lastName }}</td>
           <td>{{ member.email }}</td>
           <td>{{ member.gender }}</td>
           <td>
@@ -69,9 +69,8 @@
 
   <app-quick-edit
     [visible]="visible"
-    [selectedMember]="selectedMember"
-    (closeQuickEdit)="closeQuickEdit()"
-    (updateMember)="updateMember($event)"
+    [(selectedMember)]="selectedMember"
+    (closeQuickEdit)="closeQuickEdit($event)"
   ></app-quick-edit>
   
 </div>

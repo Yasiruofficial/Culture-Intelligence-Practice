@@ -18,7 +18,12 @@ import { User } from '../../../core/models/user.model';
 export class RegisterComponent {
   singUpForm: FormGroup;
   constructor(private fb: FormBuilder, private authService: AuthService) {
-    this.singUpForm = this.fb.group(
+    this.singUpForm = this.fb.group<{
+      fullName: FormControl;
+      email: FormControl;
+      password: FormControl;
+      confirmPassword: FormControl;
+    }>(
       {
         fullName: new FormControl('', Validators.required),
         email: new FormControl('', [Validators.required, Validators.email]),
@@ -31,13 +36,17 @@ export class RegisterComponent {
     );
   }
 
+  get passwordMismatch() {
+    return this.singUpForm.controls['confirmassword'].hasError(
+      'passwordMismatch'
+    )
+      ? 'Password does not match'
+      : '';
+  }
+
   confirmPassworMatch(formGroup: FormGroup) {
     const password = formGroup.controls['password'];
     const confirm_password = formGroup.controls['confirmPassword'];
-
-    console.log(password.dirty);
-    console.log(confirm_password.dirty);
-
     if (
       password.dirty &&
       confirm_password.dirty &&
@@ -45,12 +54,12 @@ export class RegisterComponent {
     ) {
       confirm_password.setErrors({
         passwordMismatch: true,
-      })
+      });
       return {
         passwordMismatch: true,
       };
     } else {
-      confirm_password.setErrors(null)
+      confirm_password.setErrors(null);
       return null;
     }
   }

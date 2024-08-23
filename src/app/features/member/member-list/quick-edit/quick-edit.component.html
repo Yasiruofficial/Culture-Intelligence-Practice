@@ -9,14 +9,14 @@
   >
     <form [formGroup]="quickEditform" (ngSubmit)="onSubmit()">
       <div class="grid grid-cols-3 grid-rows-2 gap-4">
-        <div><label for="first_name">First Name</label></div>
+        <div><label for="firstName">First Name</label></div>
         <div class="col-span-2">
           <input
             type="text"
-            id="first_name"
-            name="first_name"
+            id="firstName"
+            name="firstName"
             pInputText
-            formControlName="first_name"
+            formControlName="firstName"
             class="w-full"
           />
         </div>

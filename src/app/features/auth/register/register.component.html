@@ -52,11 +52,7 @@
         </div>
         <div class="row-start-5"></div>
         <div class="col-span-2 row-start-5 text-red-800">
-          {{
-            singUpForm.controls["confirmPassword"].hasError("passwordMismatch")
-              ? "Password does not match"
-              : ""
-          }}
+          {{ passwordMismatch }}
         </div>
       </div>
 

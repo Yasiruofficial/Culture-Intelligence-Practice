@@ -25,7 +25,6 @@ import {
 import { Subscription } from 'rxjs';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
-
 @Component({
   selector: 'app-member-upsert',
   standalone: true,
@@ -44,15 +43,14 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     ProgressSpinnerModule,
   ],
   templateUrl: './member-upsert.component.html',
-  styleUrl: './member-upsert.component.scss'
+  styleUrl: './member-upsert.component.scss',
 })
-export class MemberUpsertComponent implements OnDestroy{
+export class MemberUpsertComponent implements OnDestroy {
   upsertMemberForm: FormGroup;
   memberId: number | null;
   memberSubscription?: Subscription;
   loading: boolean = false;
 
-  
   constructor(
     private formBuilder: FormBuilder,
     private memberService: MemberService,
@@ -63,11 +61,11 @@ export class MemberUpsertComponent implements OnDestroy{
     if (isNaN(this.memberId)) this.router.navigate(['/members']);
 
     this.upsertMemberForm = this.formBuilder.group({
-      first_name: new FormControl('', {
+      firstName: new FormControl('', {
         validators: [Validators.required],
         nonNullable: true,
       }),
-      last_name: new FormControl('', {
+      lastName: new FormControl('', {
         validators: [Validators.required],
         nonNullable: true,
       }),
@@ -80,7 +78,6 @@ export class MemberUpsertComponent implements OnDestroy{
         nonNullable: true,
       }),
     });
-    
 
     if (this.memberId) {
       this.loading = true;
@@ -91,8 +88,8 @@ export class MemberUpsertComponent implements OnDestroy{
             console.log('member add subscribe executed', data);
             if (data) {
               this.upsertMemberForm.setValue({
-                first_name: data.first_name,
-                last_name: data.last_name,
+                firstName: data.firstName,
+                lastName: data.lastName,
                 email: data.email,
                 gender: data.gender,
               });
@@ -113,10 +110,7 @@ export class MemberUpsertComponent implements OnDestroy{
       if (!this.memberId) {
         this.memberService.addMember(this.upsertMemberForm.getRawValue());
       } else {
-        this.memberService.updateMember(
-          this.memberId,
-          this.upsertMemberForm.getRawValue()
-        );
+        this.memberService.updateMember(this.upsertMemberForm.getRawValue());
       }
     }
   }

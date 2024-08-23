@@ -68,16 +68,14 @@ export class MemberListComponent implements OnDestroy {
     this.visible = true;
   }
 
-  closeQuickEdit() {
+  closeQuickEdit(isSubmit : boolean) {
+    if(isSubmit){
+      if (this.selectedMember.id) {
+        this.memberService.updateMember(this.selectedMember);
+      }
+    }
     this.selectedMember = null;
     this.visible = false;
-  }
-
-  updateMember(updatedMember: Member) {
-    if (updatedMember.id) {
-      this.memberService.updateMember(updatedMember.id, updatedMember);
-    }
-    this.closeQuickEdit();
   }
 
   logout() {

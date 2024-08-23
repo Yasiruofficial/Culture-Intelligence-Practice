@@ -15,24 +15,24 @@
     </div>
     <form [formGroup]="upsertMemberForm" (ngSubmit)="onSubmit()">
       <div class="grid grid-cols-3 grid-rows-4 gap-4" loa>
-        <div><label for="first_name">First Name</label></div>
+        <div><label for="firstName">First Name</label></div>
         <div class="col-span-2">
           <input
             type="text"
-            id="first_name"
-            name="first_name"
+            id="firstName"
+            name="firstName"
             pInputText
-            formControlName="first_name"
+            formControlName="firstName"
           />
         </div>
-        <div class="row-start-2"><label for="last_name">Last Name</label></div>
+        <div class="row-start-2"><label for="lastName">Last Name</label></div>
         <div class="col-span-2 row-start-2">
           <input
             type="text"
-            id="last_name"
-            name="last_name"
+            id="lastName"
+            name="lastName"
             pInputText
-            formControlName="last_name"
+            formControlName="lastName"
           />
         </div>
         <div class="row-start-3">

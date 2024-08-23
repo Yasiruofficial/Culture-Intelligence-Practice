@@ -11,11 +11,9 @@ export class MemberService {
   private membersSubject = new BehaviorSubject<Member[] | undefined>(undefined);
   $membersData = this.membersSubject.asObservable();
 
-  sharedV = Math.random();
-
   constructor(private http: HttpClient, private router: Router) {
     this.http
-      .get<Member[]>(
+      .get<any[]>(
         'https://run.mocky.io/v3/6f88b2a6-0df7-48ce-8337-b870280a2d76'
       )
       .pipe(
@@ -25,7 +23,14 @@ export class MemberService {
         })
       )
       .subscribe((data) => {
-        this.membersSubject.next(data);
+        const mapped = data.map((d) => {
+          return {
+            ...d,
+            firstName: d.first_name,
+            lastName: d.last_name,
+          } as Member;
+        });
+        this.membersSubject.next(mapped);
       });
   }
 
@@ -60,39 +65,15 @@ export class MemberService {
     this.router.navigate(['/members']);
   };
 
-  updateMember = (id: number, member: Member) => {
-    const modifiedMembers = this.membersSubject?.value?.map((m) => {
-      if (m.id == id) {
-        return member;
-      } else {
-        return m;
-      }
-    });
-    this.membersSubject.next(modifiedMembers);
-    this.router.navigate(['/']);
-  };
+  updateMember = (member: Member) => {
+    const memberList = this.membersSubject?.value;
+    let index = memberList?.findIndex((m) => m.id === member.id);
 
-  quickEditMember = ({
-    id,
-    email,
-    first_name,
-  }: {
-    id: number;
-    email: string;
-    first_name: string;
-  }) => {
-    const modifiedMembers = this.membersSubject?.value?.map((m) => {
-      if (m.id == id) {
-        return {
-          ...m,
-          email,
-          first_name,
-        };
-      } else {
-        return m;
-      }
-    });
-    this.membersSubject.next(modifiedMembers);
+    if (index !== undefined && index != -1 && memberList) {
+      memberList[index] = member;
+    }
+
+    this.membersSubject.next(memberList);
     this.router.navigate(['/']);
   };
 

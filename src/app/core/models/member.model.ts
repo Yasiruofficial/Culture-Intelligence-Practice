@@ -1,7 +1,7 @@
-export interface Member {
+export class Member {
   id?: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  gender: string;
+  firstName!: string;
+  lastName!: string;
+  email!: string;
+  gender!: string;
 }

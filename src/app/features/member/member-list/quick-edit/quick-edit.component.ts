@@ -28,37 +28,50 @@ import { Member } from '../../../../core/models/member.model';
   styleUrl: './quick-edit.component.scss',
 })
 export class QuickEditComponent implements OnChanges {
-  
   @Input() visible: boolean = false;
-  @Input() selectedMember: any = null;
-  @Output() updateMember = new EventEmitter<Member>();
-  @Output() closeQuickEdit = new EventEmitter<void>();
+  @Input() selectedMember: Member | null = null;
+  @Output() selectedMemberChange = new EventEmitter<Member>();
+  @Output() closeQuickEdit = new EventEmitter<boolean>();
 
   position: TPosition = 'center';
 
   quickEditform: FormGroup = new FormGroup({
-    first_name: new FormControl(''),
+    firstName: new FormControl(''),
     email: new FormControl(''),
   });
 
   ngOnChanges(_changes: SimpleChanges): void {
     if (this.selectedMember) {
       this.quickEditform.setValue({
-        first_name: this.selectedMember.first_name,
+        firstName: this.selectedMember.firstName,
         email: this.selectedMember.email,
       });
     }
   }
 
   onSubmit() {
-    this.updateMember.emit({
+  
+    console.log({
       ...this.selectedMember,
-      first_name: this.quickEditform.get('first_name'),
-      email: this.quickEditform.get('email'),
+      ...this.quickEditform.value,
+    })
+
+    console.log({
+      ...this.selectedMember,
+    })
+
+    console.log({
+      ...this.quickEditform.value,
+    })
+
+    this.selectedMemberChange.emit({
+      ...this.selectedMember,
+      ...this.quickEditform.value,
     });
+    this.closeQuickEdit.emit(true);
   }
 
   onClose() {
-    this.closeQuickEdit.emit();
+    this.closeQuickEdit.emit(false);
   }
 }
